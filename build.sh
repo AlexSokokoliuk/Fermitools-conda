@@ -6,7 +6,7 @@ export condaname="fermitools"
 # To checkout arbitrary other refs (Tag, Branch, Commit) add them as a space
 #   delimited list after 'conda' in the order of priority.
 #   e.g. ScienceTools highest_priority_commit middle_priority_ref branch1 branch2 ... lowest_priority
-repoman --remote-base https://github.com/fermi-lat checkout --force --develop ScienceTools conda
+#repoman --remote-base https://github.com/fermi-lat checkout --force --develop ScienceTools conda
 
 
 # Add optimization
@@ -57,48 +57,53 @@ rm -rf ${PREFIX}/include/fftw
 # Install in a place where conda will find the ST
 
 # Libraries
-mkdir -p $PREFIX/lib/${condaname}
+mkdir -p $OUTPUT/lib/${condaname}
 if [ -d "lib/debianstretch/sid-x86_64-64bit-gcc48" ]; then
     echo "Subdirectory Found! (Lib)"
     pwd
     ls lib/
     ls lib/debianstretch/
     ls lib/debianstretch/sid-x86_64-64bit-gcc48/
-    cp -R lib/*/*/* $PREFIX/lib/${condaname}
+    \cp -R lib/*/*/* $OUTPUT/lib/${condaname}
 else
     echo "Subdirectory Not Found! (Lib)"
-    cp -R lib/*/* $PREFIX/lib/${condaname}
+    \cp -R lib/*/* $OUTPUT/lib/${condaname}
 fi
 
 # Headers
-mkdir -p $PREFIX/include/${condaname}
+mkdir -p $OUTPUT/include/${condaname}
 if [ -d "include/debianstretch/sid-x86_64-64bit-gcc48" ]; then
     echo "Subdirectory Found! (Include)"
-    cp -R include/*/* $PREFIX/include/${condaname}
+    \cp -R include/*/* $OUTPUT/include/${condaname}
 else
     echo "Subdirectory Not Found! (Include)"
-    cp -R include/* $PREFIX/include/${condaname}
+    \cp -R include/* $OUTPUT/include/${condaname}
 fi
 
 # Binaries
-mkdir -p $PREFIX/bin/${condaname}
+mkdir -p $OUTPUT/bin/${condaname}
 if [ -d "exe/debianstretch/sid-x86_64-64bit-gcc48" ]; then
     echo "Subdirectory Found! (bin)"
-    cp -R exe/*/*/* $PREFIX/bin/${condaname}
+    \cp -R exe/*/*/* $OUTPUT/bin/${condaname}
 else
     echo "Subdirectory Not Found! (bin)"
-    cp -R exe/*/* $PREFIX/bin/${condaname}
+    \cp -R exe/*/* $OUTPUT/bin/${condaname}
 fi
 
 # Python packages
 # Figure out the path to the site-package directory
 export sitepackagesdir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+export sitepackagesdir=$OUTPUT/lib/python2.7/site-packages
+
+echo "OUTPUT=$OUTPUT"
+echo "sitepackagesdir=$sitepackagesdir"
+
 # Create our package there
 mkdir -p $sitepackagesdir/${condaname}
 # Making an empty __init__.py makes our directory a python package
 echo "" > $sitepackagesdir/${condaname}/__init__.py
 # Copy all our stuff there
-cp -R python/* $sitepackagesdir/${condaname}
+\cp -R python/* $sitepackagesdir/${condaname}
 # There are python libraries that are actually under /lib, so let's
 # add a .pth file so that it is not necessary to setup PYTHONPATH
 # (which is discouraged by conda)
@@ -109,28 +114,28 @@ echo "$PREFIX/lib/${condaname}" > $sitepackagesdir/${condaname}.pth
 echo "${sitepackagesdir}/fermitools" >> $sitepackagesdir/${condaname}.pth
 
 # Pfiles
-mkdir -p $PREFIX/share/${condaname}/syspfiles
-cp -R syspfiles/* $PREFIX/share/${condaname}/syspfiles
+mkdir -p $OUTPUT/share/${condaname}/syspfiles
+\cp -R syspfiles/* $OUTPUT/share/${condaname}/syspfiles
 
 # Xml
-mkdir -p $PREFIX/share/${condaname}/xml
-cp -R xml/* $PREFIX/share/${condaname}/xml
+mkdir -p $OUTPUT/share/${condaname}/xml
+\cp -R xml/* $OUTPUT/share/${condaname}/xml
 
 # Data
-mkdir -p $PREFIX/share/${condaname}/data
-cp -R data/* $PREFIX/share/${condaname}/data
+mkdir -p $OUTPUT/share/${condaname}/data
+\cp -R data/* $OUTPUT/share/${condaname}/data
 
 # fhelp
-mkdir -p $PREFIX/share/${condaname}/help
-cp -R fermitools-fhelp/* $PREFIX/share/${condaname}/help
-rm -f $PREFIX/share/${condaname}/help/README.md #Remove the git repo README
+mkdir -p $OUTPUT/share/${condaname}/help
+\cp -R fermitools-fhelp/* $OUTPUT/share/${condaname}/help
+rm -f $OUTPUT/share/${condaname}/help/README.md #Remove the git repo README
 
 # Copy also the activate and deactivate scripts
-mkdir -p $PREFIX/etc/conda/activate.d
-mkdir -p $PREFIX/etc/conda/deactivate.d
+mkdir -p $OUTPUT/etc/conda/activate.d
+mkdir -p $OUTPUT/etc/conda/deactivate.d
 
-cp $RECIPE_DIR/activate.sh $PREFIX/etc/conda/activate.d/activate_${condaname}.sh
-cp $RECIPE_DIR/deactivate.sh $PREFIX/etc/conda/deactivate.d/deactivate_${condaname}.sh
+\cp $RECIPE_DIR/activate.sh $OUTPUT/etc/conda/activate.d/activate_${condaname}.sh
+\cp $RECIPE_DIR/deactivate.sh $OUTPUT/etc/conda/deactivate.d/deactivate_${condaname}.sh
 
-cp $RECIPE_DIR/activate.csh $PREFIX/etc/conda/activate.d/activate_${condaname}.csh
-cp $RECIPE_DIR/deactivate.csh $PREFIX/etc/conda/deactivate.d/deactivate_${condaname}.csh
+\cp $RECIPE_DIR/activate.csh $OUTPUT/etc/conda/activate.d/activate_${condaname}.csh
+\cp $RECIPE_DIR/deactivate.csh $OUTPUT/etc/conda/deactivate.d/deactivate_${condaname}.csh
