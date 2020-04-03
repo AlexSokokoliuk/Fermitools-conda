@@ -155,3 +155,8 @@ else
     echo "You have PYTHONPATH set. This might interfere with the correct functioning of conda and the Fermi ST"
 
 fi
+
+
+if [ "$(uname)" == "Darwin" ]; then
+    export DYLD_LIBRARY_PATH="$CONDA_PREFIX/lib/fermitools"
+fi
