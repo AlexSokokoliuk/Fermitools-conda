@@ -8,6 +8,7 @@ export condaname="fermitools"
 #   e.g. ScienceTools highest_priority_commit middle_priority_ref branch1 branch2 ... lowest_priority
 #repoman --remote-base https://github.com/fermi-lat checkout --force --develop ScienceTools conda
 
+export OUTPUT=${PREFIX}
 
 # Add optimization
 export CFLAGS="-O2 ${CFLAGS}"
@@ -93,7 +94,6 @@ fi
 # Python packages
 # Figure out the path to the site-package directory
 export sitepackagesdir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-export sitepackagesdir=$OUTPUT/lib/python2.7/site-packages
 
 echo "OUTPUT=$OUTPUT"
 echo "sitepackagesdir=$sitepackagesdir"
