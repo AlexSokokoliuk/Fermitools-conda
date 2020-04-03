@@ -158,5 +158,6 @@ fi
 
 
 if [ "$(uname)" == "Darwin" ]; then
+    echo "Setting DYLD_LIBRARY_PATH=$CONDA_PREFIX/lib/fermitools"
     export DYLD_LIBRARY_PATH="$CONDA_PREFIX/lib/fermitools"
 fi
