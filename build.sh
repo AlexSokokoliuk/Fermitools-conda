@@ -6,21 +6,14 @@ export condaname="fermitools"
 # To checkout arbitrary other refs (Tag, Branch, Commit) add them as a space
 #   delimited list after 'conda' in the order of priority.
 #   e.g. ScienceTools highest_priority_commit middle_priority_ref branch1 branch2 ... lowest_priority
-<<<<<<< Updated upstream
-#repoman --remote-base https://github.com/fermi-lat checkout --force --develop ScienceTools conda
-
-export OUTPUT=${PREFIX}
-=======
 
 if [[ -z $FERMITOOLS_SRC_DIR ]]; then
     repoman --remote-base https://github.com/fermi-lat checkout --force --develop ScienceTools conda
 else
     echo "Build from source code in $FERMITOOLS_SRC_DIR"
-    pushd $FERMITOOLS_SRC_DIR
+    #pushd $FERMITOOLS_SRC_DIR
 fi
     
->>>>>>> Stashed changes
-
 # Add optimization
 export CFLAGS="-O2 ${CFLAGS}"
 export CXXFLAGS="-O2 ${CXXFLAGS}"
@@ -41,6 +34,10 @@ else
     export LDFLAGS="${LDFLAGS} -fopenmp"
 
 fi
+
+echo "PREFIX=$PREFIX"
+echo "RECIPE_DIR=$RECIPE_DIR"
+
 
 ln -s ${cc} ${PREFIX}/bin/gcc
 
@@ -68,59 +65,46 @@ rm -rf ${PREFIX}/include/fftw
 # Install in a place where conda will find the ST
 
 # Libraries
-<<<<<<< Updated upstream
-mkdir -p $OUTPUT/lib/${condaname}
-=======
 \rm -rf $PREFIX/lib/${condaname}
 mkdir -p $PREFIX/lib/${condaname}
->>>>>>> Stashed changes
 if [ -d "lib/debianstretch/sid-x86_64-64bit-gcc48" ]; then
     echo "Subdirectory Found! (Lib)"
     pwd
     ls lib/
     ls lib/debianstretch/
     ls lib/debianstretch/sid-x86_64-64bit-gcc48/
-    \cp -R lib/*/*/* $OUTPUT/lib/${condaname}
+    \cp -R lib/*/*/* $PREFIX/lib/${condaname}
 else
     echo "Subdirectory Not Found! (Lib)"
-    \cp -R lib/*/* $OUTPUT/lib/${condaname}
+    \cp -R lib/*/* $PREFIX/lib/${condaname}
 fi
 
 # Headers
-<<<<<<< Updated upstream
-mkdir -p $OUTPUT/include/${condaname}
-=======
 \rm -rf $PREFIX/include/${condaname}
 mkdir -p $PREFIX/include/${condaname}
->>>>>>> Stashed changes
 if [ -d "include/debianstretch/sid-x86_64-64bit-gcc48" ]; then
     echo "Subdirectory Found! (Include)"
-    \cp -R include/*/* $OUTPUT/include/${condaname}
+    \cp -R include/*/* $PREFIX/include/${condaname}
 else
     echo "Subdirectory Not Found! (Include)"
-    \cp -R include/* $OUTPUT/include/${condaname}
+    \cp -R include/* $PREFIX/include/${condaname}
 fi
 
 # Binaries
-<<<<<<< Updated upstream
-mkdir -p $OUTPUT/bin/${condaname}
-=======
 \rm -rf $PREFIX/bin/${condaname}
 mkdir -p $PREFIX/bin/${condaname}
->>>>>>> Stashed changes
 if [ -d "exe/debianstretch/sid-x86_64-64bit-gcc48" ]; then
     echo "Subdirectory Found! (bin)"
-    \cp -R exe/*/*/* $OUTPUT/bin/${condaname}
+    \cp -R exe/*/*/* $PREFIX/bin/${condaname}
 else
     echo "Subdirectory Not Found! (bin)"
-    \cp -R exe/*/* $OUTPUT/bin/${condaname}
+    \cp -R exe/*/* $PREFIX/bin/${condaname}
 fi
 
 # Python packages
 # Figure out the path to the site-package directory
 export sitepackagesdir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 
-echo "OUTPUT=$OUTPUT"
 echo "sitepackagesdir=$sitepackagesdir"
 
 # Create our package there
@@ -161,8 +145,8 @@ cp -R fermitools-fhelp/* $PREFIX/share/${condaname}/help
 rm -f $PREFIX/share/${condaname}/help/README.md #Remove the git repo README
 
 # Copy also the activate and deactivate scripts
-mkdir -p $OUTPUT/etc/conda/activate.d
-mkdir -p $OUTPUT/etc/conda/deactivate.d
+mkdir -p $PREFIX/etc/conda/activate.d
+mkdir -p $PREFIX/etc/conda/deactivate.d
 
 \cp $RECIPE_DIR/activate.sh $PREFIX/etc/conda/activate.d/activate_${condaname}.sh
 \cp $RECIPE_DIR/deactivate.sh $PREFIX/etc/conda/deactivate.d/deactivate_${condaname}.sh
@@ -175,6 +159,7 @@ if [[ -z $FERMITOOLS_SRC_DIR ]]; then
     echo "Finished build"
 else
     echo "Finished build from $FERMITOOLS_SRC_DIR"
-    popd $FERMITOOLS_SRC_DIR
+    #popd $FERMITOOLS_SRC_DIR
 fi
+
 
