@@ -1,5 +1,5 @@
 {% set name = "fermitools" %}
-{% set version = "1.6.0" %}
+{% set version = "1.9.0" %}
 
 package:
   name: {{ name|lower }}
@@ -11,7 +11,7 @@ source:
 build:
   number: {{ environ.get('BUILD_NUMBER', 0)}}
   skip: true  # [win]
-  skip: true  # [py3k]
+
 
 requirements:
   build:
@@ -32,37 +32,43 @@ requirements:
     - gsl
     - healpix_cxx
     - matplotlib
-    - numpy >=1.11
+    - numpy >=1.17
+    - openblas
     - pmw
-    - python 2.7
+    - python 3.7.*
+    - readline
     - root >=6.0
-    - scipy
-    - scons
+    - scons 3.0.3
     - swig
     - wcslib
     - xerces-c
+    - zstd 1.3.7
 
   run:
     - ape >=3
     - aplpy
     - astropy
     - blas
-    - clhep
+    - clhep 
     - cppunit
     - f2c 0.0.2
-    - fermitools-data
     - fftw
+    - fermitools-data >=0.16 # This must be updated with every model release
     - gsl
     - healpix_cxx
     - matplotlib
-    - numpy >=1.11
+    - ncurses
+    - numpy  >=1.17
+    - openblas
     - pmw
-    - python 2.7
+    - python 3.7.*
     - pyyaml
+    - readline
     - root >=6.0
     - scipy
     - wcslib
     - xerces-c
+    - zstd 1.3.7
 
 test:
   imports:
