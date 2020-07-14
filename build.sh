@@ -33,8 +33,8 @@ scons -C ScienceTools \
       -j ${CPU_COUNT} \
       --with-cc="${CC}" \
       --with-cxx="${CXX}" \
-      --ccflags="${CFLAGS}" \
-      --cxxflags="${CXXFLAGS}" \
+      --ccflags="-g ${CFLAGS}" \
+      --cxxflags="-g ${CXXFLAGS}" \
       --ldflags="${LDFLAGS}" \
       --compile-opt \
       all
