@@ -28,7 +28,7 @@ tip master
 celestialSources master
 
 # instrument response
-irfs master
+irfs IRF-18
 
 # simulation
 observationSim master
